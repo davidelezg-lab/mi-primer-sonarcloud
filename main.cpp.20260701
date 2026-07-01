@@ -2,8 +2,6 @@
 
 int main() {
 
-    int x;
-
     std::cout << "Hola SonarCloud" << std::endl;
 
     return 0;
