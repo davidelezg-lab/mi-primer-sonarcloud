@@ -2,7 +2,7 @@
 
 int main() {
 
-    std::cout << "Hola SonarCloud" << std::endl;
+    std::cout << "Hola";
 
-    return 0;
+    return
 }
