@@ -24,7 +24,7 @@ pipeline {
 
                 withSonarQubeEnv('SonarCloud') {
 
-                    bat 'sonar-scanner'
+                    bat '"C:\\sonar-scanner\\bin\\sonar-scanner.bat"'
 
                 }
 
