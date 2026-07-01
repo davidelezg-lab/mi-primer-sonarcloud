@@ -8,30 +8,21 @@ pipeline {
 
             steps {
 
-                bat '''
-                echo ==== DIRECTORIO ====
-                dir
+                bat '"C:\\msys64\\ucrt64\\bin\\g++.exe" main.cpp -o app.exe'
 
-                echo.
-                echo ==== CONTENIDO MAIN.CPP ====
-                type main.cpp
+            }
+        }
 
-                echo.
-                echo ==== VERSION G++ ====
-                "C:\\msys64\\ucrt64\\bin\\g++.exe" --version
+        stage('Analisis SonarCloud') {
 
-                echo.
-                echo ==== COMPILANDO ====
-                "C:\\msys64\\ucrt64\\bin\\g++.exe" main.cpp -o app.exe
+            steps {
 
-                echo.
-                echo ==== CODIGO RETORNO ====
-                echo ERRORLEVEL=%ERRORLEVEL%
+                withSonarQubeEnv('SonarCloud') {
 
-                echo.
-                echo ==== FICHEROS GENERADOS ====
-                dir
-                '''
+                    bat 'sonar-scanner'
+
+                }
+
             }
         }
 
