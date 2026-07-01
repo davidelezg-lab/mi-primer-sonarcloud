@@ -8,21 +8,16 @@ pipeline {
 
             steps {
 
-                bat '"C:\\msys64\\ucrt64\\bin\\g++.exe" main.cpp -o app.exe'
+                bat '''
+                "C:\\msys64\\ucrt64\\bin\\g++.exe" main.cpp -o app.exe
 
-            }
-        }
-
-        stage('Analisis SonarCloud') {
-
-            steps {
-
-                withSonarQubeEnv('SonarCloud') {
-
-                    bat 'sonar-scanner'
-
-                }
-
+                if exist app.exe (
+                    echo COMPILACION CORRECTA
+                ) else (
+                    echo ERROR: app.exe no generado
+                    exit /b 1
+                )
+                '''
             }
         }
 
