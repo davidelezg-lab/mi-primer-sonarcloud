@@ -1,9 +1,5 @@
 #include <iostream>
 
-int suma(int a, int b) {
-    return a + b;
-}
-
 int main() {
 
     int a = 10;
@@ -12,7 +8,7 @@ int main() {
     int d = 40;
     int e = 50;
 
-    int total = suma(a, b) + c + d + e;
+    int total = a + b + c + d + e;
 
     std::cout << total << std::endl;
 
