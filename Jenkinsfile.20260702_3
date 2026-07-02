@@ -4,7 +4,7 @@ pipeline {
 
     stages {
 
-        stage('Compilar Aplicacion') {
+        stage('Compilar') {
 
             steps {
 
@@ -18,7 +18,7 @@ pipeline {
             }
         }
 
-        stage('Ejecutar Aplicacion') {
+        stage('Ejecutar programa') {
 
             steps {
 
@@ -30,44 +30,20 @@ pipeline {
             }
         }
 
-        stage('Compilar Test con Cobertura') {
+        stage('Test') {
 
             steps {
 
                 bat '''
                 set PATH=C:\\msys64\\ucrt64\\bin;%PATH%
 
-                "C:\\msys64\\ucrt64\\bin\\g++.exe" --coverage suma.cpp test.cpp -o test.exe
+                echo ===== TEST NUEVO =====
+
+                "C:\\msys64\\ucrt64\\bin\\g++.exe" test.cpp -o test.exe
 
                 if not exist test.exe exit /b 1
-                '''
-            }
-        }
-
-        stage('Ejecutar Test') {
-
-            steps {
-
-                bat '''
-                set PATH=C:\\msys64\\ucrt64\\bin;%PATH%
 
                 test.exe
-                '''
-            }
-        }
-
-        stage('Generar Cobertura') {
-
-            steps {
-
-                bat '''
-                set PATH=C:\\msys64\\ucrt64\\bin;%PATH%
-
-                gcov suma.cpp
-
-                echo ===== FICHEROS GENERADOS =====
-
-                dir *.gcov
                 '''
             }
         }
