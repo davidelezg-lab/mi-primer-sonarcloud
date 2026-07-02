@@ -23,25 +23,22 @@ pipeline {
             steps {
 
                 bat '''
+                echo ===== PATH ACTUAL =====
+                echo %PATH%
+
+                echo.
+                echo ===== APP.EXE =====
+                dir app.exe
+
+                echo.
+                echo ===== ANIADIENDO DLLS DE MSYS2 =====
+
                 set PATH=C:\\msys64\\ucrt64\\bin;%PATH%
+
+                echo.
+                echo ===== EJECUTANDO PROGRAMA =====
 
                 app.exe
-                '''
-            }
-        }
-
-        stage('Test') {
-
-            steps {
-
-                bat '''
-                "C:\\msys64\\ucrt64\\bin\\g++.exe" test.cpp -o test.exe
-
-                if not exist test.exe exit /b 1
-
-                set PATH=C:\\msys64\\ucrt64\\bin;%PATH%
-
-                test.exe
                 '''
             }
         }
@@ -71,6 +68,7 @@ pipeline {
 
             }
         }
+
     }
 
     post {

@@ -1,20 +1,14 @@
 #include <iostream>
 
 int suma(int a, int b) {
-    return a - b;
+    return a + b;
 }
 
 int main() {
 
-    int a = 10;
-    int b = 20;
-    int c = 30;
-    int d = 40;
-    int e = 50;
+    int resultado = suma(10, 20);
 
-    int total = suma(a, b) + c + d + e;
-
-    std::cout << total << std::endl;
+    std::cout << resultado << std::endl;
 
     return 0;
 }
