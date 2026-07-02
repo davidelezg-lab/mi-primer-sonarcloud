@@ -19,7 +19,17 @@ pipeline {
         stage('Ejecutar y comprobar resultado') {
             steps {
                 bat '''
+                app.exe
+
                 app.exe > resultado.txt
+
+                echo ==========================
+                echo CONTENIDO RESULTADO.TXT
+                echo ==========================
+
+                type resultado.txt
+
+                echo ==========================
 
                 findstr "30" resultado.txt
 
@@ -53,9 +63,11 @@ pipeline {
         always {
             echo 'Fin de la ejecucion'
         }
+
         success {
             echo 'Pipeline correcta'
         }
+
         failure {
             echo 'Pipeline fallida'
         }
