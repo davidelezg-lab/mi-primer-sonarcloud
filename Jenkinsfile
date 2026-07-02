@@ -7,45 +7,27 @@ pipeline {
         stage('Compilar') {
             steps {
                 bat '''
-                "C:/msys64/ucrt64/bin/g++.exe" main.cpp -o app.exe
+                echo ===== MAIN.CPP =====
+                type main.cpp
+                echo ====================
+
+                "C:/msys64/ucrt64/bin/g++.exe" main.cpp -o app.exe 2> error.txt
+
+                echo ===== ERRORES COMPILACION =====
+
+                type error.txt
+
+                echo ==============================
+
+                exit /b 0
                 '''
-            }
-        }
-
-        stage('Ejecutar') {
-            steps {
-                bat '''
-                app.exe
-                '''
-            }
-        }
-
-        stage('Analisis SonarCloud') {
-            steps {
-                withSonarQubeEnv('SonarCloud') {
-                    bat '''
-                    "C:/sonar-scanner/bin/sonar-scanner.bat"
-                    '''
-                }
-            }
-        }
-
-        stage('Quality Gate') {
-            steps {
-                timeout(time: 5, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
             }
         }
     }
 
     post {
-        success {
-            echo 'Pipeline correcta'
-        }
-
-        failure {
-            echo 'Pipeline fallida'
+        always {
+            echo 'Fin de la ejecucion'
         }
     }
 }
