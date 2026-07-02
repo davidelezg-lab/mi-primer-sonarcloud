@@ -3,7 +3,7 @@
 
 int main() {
 
-    if (suma(10,20) == 30) {
+    if (suma(10, 20) == 30) {
 
         std::cout << "TEST OK" << std::endl;
 
@@ -12,4 +12,5 @@ int main() {
 
     std::cout << "TEST ERROR" << std::endl;
 
-    return
+    return 1;
+}

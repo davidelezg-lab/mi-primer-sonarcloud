@@ -11,7 +11,7 @@ pipeline {
                 bat '''
                 set PATH=C:\\msys64\\ucrt64\\bin;%PATH%
 
-                "C:\\msys64\\ucrt64\\bin\\g++.exe" main.cpp -o app.exe
+                "C:\\msys64\\ucrt64\\bin\\g++.exe" main.cpp suma.cpp -o app.exe
 
                 if not exist app.exe exit /b 1
                 '''
@@ -65,7 +65,7 @@ pipeline {
 
                 gcov suma.cpp
 
-                echo ===== FICHEROS GENERADOS =====
+                echo ===== ARCHIVOS GCOV =====
 
                 dir *.gcov
                 '''

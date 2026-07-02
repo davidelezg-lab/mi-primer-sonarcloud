@@ -3,4 +3,3 @@ sonar.organization=davidelezg-lab
 sonar.sources=.
 sonar.sourceEncoding=UTF-8
 sonar.exclusions=**/*.exe,**/*.dll,**/*.obj,**/*.o,**/.scannerwork/**
-sonar.cfamily.gcov.reportsPath
