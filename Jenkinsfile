@@ -40,12 +40,6 @@ pipeline {
                 "C:\\msys64\\ucrt64\\bin\\g++.exe" --coverage suma.cpp test.cpp -o test.exe
 
                 if not exist test.exe exit /b 1
-
-                echo ===== GCNO =====
-                dir *.gcno
-
-                echo ===== GCDA =====
-                dir *.gcda
                 '''
             }
         }
@@ -58,12 +52,6 @@ pipeline {
                 set PATH=C:\\msys64\\ucrt64\\bin;%PATH%
 
                 test.exe
-
-                echo ===== GCNO DESPUES DEL TEST =====
-                dir *.gcno
-
-                echo ===== GCDA DESPUES DEL TEST =====
-                dir *.gcda
                 '''
             }
         }
@@ -75,16 +63,45 @@ pipeline {
                 bat '''
                 set PATH=C:\\msys64\\ucrt64\\bin;%PATH%
 
-                echo ===== FICHEROS DEL DIRECTORIO =====
-
-                dir
-
                 echo ===== GCNO =====
                 dir *.gcno
 
                 echo ===== GCDA =====
                 dir *.gcda
+
+                echo ===== GENERANDO COBERTURA =====
+
+                gcov test-suma.gcno
+
+                echo ===== GCOV =====
+                dir *.gcov
                 '''
+            }
+        }
+
+        stage('Analisis SonarCloud') {
+
+            steps {
+
+                withSonarQubeEnv('SonarCloud') {
+
+                    bat '"C:\\sonar-scanner\\bin\\sonar-scanner.bat"'
+
+                }
+
+            }
+        }
+
+        stage('Quality Gate') {
+
+            steps {
+
+                timeout(time: 5, unit: 'MINUTES') {
+
+                    waitForQualityGate abortPipeline: true
+
+                }
+
             }
         }
     }
@@ -92,15 +109,27 @@ pipeline {
     post {
 
         success {
+
             echo 'Pipeline completada correctamente'
+
         }
 
         failure {
+
             echo 'Pipeline fallida'
+
+        }
+
+        aborted {
+
+            echo 'Pipeline abortada'
+
         }
 
         always {
+
             echo 'Fin de la ejecucion'
+
         }
     }
 }
