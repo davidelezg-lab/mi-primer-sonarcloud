@@ -7,7 +7,7 @@ pipeline {
         stage('Compilar') {
             steps {
                 bat '''
-                "C:\msys64\ucrt64\bin\g++.exe" main.cpp -o app.exe
+                "C:/msys64/ucrt64/bin/g++.exe" main.cpp -o app.exe
 
                 if not exist app.exe exit /b 1
 
@@ -33,7 +33,9 @@ pipeline {
         stage('Analisis SonarCloud') {
             steps {
                 withSonarQubeEnv('SonarCloud') {
-                    bat '"C:\sonar-scanner\bin\sonar-scanner.bat"'
+                    bat '''
+                    "C:/sonar-scanner/bin/sonar-scanner.bat"
+                    '''
                 }
             }
         }
@@ -44,6 +46,18 @@ pipeline {
                     waitForQualityGate abortPipeline: true
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            echo 'Fin de la ejecucion'
+        }
+        success {
+            echo 'Pipeline correcta'
+        }
+        failure {
+            echo 'Pipeline fallida'
         }
     }
 }
