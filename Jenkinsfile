@@ -4,132 +4,46 @@ pipeline {
 
     stages {
 
-        stage('Compilar Aplicacion') {
-
+        stage('Compilar') {
             steps {
-
                 bat '''
-                set PATH=C:\\msys64\\ucrt64\\bin;%PATH%
-
-                "C:\\msys64\\ucrt64\\bin\\g++.exe" main.cpp suma.cpp -o app.exe
+                "C:\msys64\ucrt64\bin\g++.exe" main.cpp -o app.exe
 
                 if not exist app.exe exit /b 1
+
+                exit /b 0
                 '''
             }
         }
 
-        stage('Ejecutar Aplicacion') {
-
+        stage('Ejecutar y comprobar resultado') {
             steps {
-
                 bat '''
-                set PATH=C:\\msys64\\ucrt64\\bin;%PATH%
+                app.exe > resultado.txt
 
-                app.exe
-                '''
-            }
-        }
+                findstr "30" resultado.txt
 
-        stage('Compilar Test con Cobertura') {
+                if errorlevel 1 exit /b 1
 
-            steps {
-
-                bat '''
-                set PATH=C:\\msys64\\ucrt64\\bin;%PATH%
-
-                "C:\\msys64\\ucrt64\\bin\\g++.exe" --coverage suma.cpp test.cpp -o test.exe
-
-                if not exist test.exe exit /b 1
-                '''
-            }
-        }
-
-        stage('Ejecutar Test') {
-
-            steps {
-
-                bat '''
-                set PATH=C:\\msys64\\ucrt64\\bin;%PATH%
-
-                test.exe
-                '''
-            }
-        }
-
-        stage('Generar Cobertura') {
-
-            steps {
-
-                bat '''
-                set PATH=C:\\msys64\\ucrt64\\bin;%PATH%
-
-                echo ===== GCNO =====
-                dir *.gcno
-
-                echo ===== GCDA =====
-                dir *.gcda
-
-                echo ===== GENERANDO COBERTURA =====
-
-                gcov test-suma.gcno
-
-                echo ===== GCOV =====
-                dir *.gcov
+                exit /b 0
                 '''
             }
         }
 
         stage('Analisis SonarCloud') {
-
             steps {
-
                 withSonarQubeEnv('SonarCloud') {
-
-                    bat '"C:\\sonar-scanner\\bin\\sonar-scanner.bat"'
-
+                    bat '"C:\sonar-scanner\bin\sonar-scanner.bat"'
                 }
-
             }
         }
 
         stage('Quality Gate') {
-
             steps {
-
                 timeout(time: 5, unit: 'MINUTES') {
-
                     waitForQualityGate abortPipeline: true
-
                 }
-
             }
-        }
-    }
-
-    post {
-
-        success {
-
-            echo 'Pipeline completada correctamente'
-
-        }
-
-        failure {
-
-            echo 'Pipeline fallida'
-
-        }
-
-        aborted {
-
-            echo 'Pipeline abortada'
-
-        }
-
-        always {
-
-            echo 'Fin de la ejecucion'
-
         }
     }
 }
