@@ -7,13 +7,7 @@ pipeline {
         stage('Mostrar codigo fuente') {
             steps {
                 bat '''
-                echo =====================
-                echo CONTENIDO MAIN.CPP
-                echo =====================
-
                 type main.cpp
-
-                echo =====================
                 '''
             }
         }
@@ -23,44 +17,36 @@ pipeline {
                 bat '''
                 "C:/msys64/ucrt64/bin/g++.exe" main.cpp -o app.exe
 
-                if not exist app.exe exit /b 1
+                if errorlevel 1 exit /b 1
 
                 dir app.exe
-
-                exit /b 0
                 '''
             }
         }
 
-        stage('Ejecutar y comprobar resultado') {
+        stage('Ejecutar') {
             steps {
                 bat '''
-                echo =====================
-                echo EJECUTANDO APP
-                echo =====================
-
                 app.exe
 
                 app.exe > resultado.txt
 
-                echo =====================
-                echo CONTENIDO RESULTADO.TXT
-                echo =====================
-
+                echo ===== RESULTADO =====
                 type resultado.txt
-
                 echo =====================
-                echo BUSCANDO 30
-                echo =====================
+                '''
+            }
+        }
 
+        stage('Validar resultado') {
+            steps {
+                bat '''
                 findstr "30" resultado.txt
 
                 if errorlevel 1 (
-                    echo ERROR: No se encontro el valor 30
+                    echo No se encontro 30
                     exit /b 1
                 )
-
-                exit /b 0
                 '''
             }
         }
