@@ -22,8 +22,24 @@ pipeline {
 
             steps {
 
-                bat 'app.exe'
+                bat '''
+                echo ===== PATH ACTUAL =====
+                echo %PATH%
 
+                echo.
+                echo ===== APP.EXE =====
+                dir app.exe
+
+                echo.
+                echo ===== ANIADIENDO DLLS DE MSYS2 =====
+
+                set PATH=C:\\msys64\\ucrt64\\bin;%PATH%
+
+                echo.
+                echo ===== EJECUTANDO PROGRAMA =====
+
+                app.exe
+                '''
             }
         }
 
@@ -55,4 +71,30 @@ pipeline {
 
     }
 
+    post {
+
+        success {
+
+            echo 'Pipeline completada correctamente'
+
+        }
+
+        failure {
+
+            echo 'Pipeline fallida'
+
+        }
+
+        aborted {
+
+            echo 'Pipeline abortada'
+
+        }
+
+        always {
+
+            echo 'Fin de la ejecucion'
+
+        }
+    }
 }
