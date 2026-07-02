@@ -9,11 +9,11 @@ pipeline {
             steps {
 
                 bat '''
+                set PATH=C:\\msys64\\ucrt64\\bin;%PATH%
+
                 "C:\\msys64\\ucrt64\\bin\\g++.exe" main.cpp -o app.exe
 
                 if not exist app.exe exit /b 1
-
-                exit /b 0
                 '''
             }
         }
@@ -35,11 +35,13 @@ pipeline {
             steps {
 
                 bat '''
+                set PATH=C:\\msys64\\ucrt64\\bin;%PATH%
+
+                echo ===== TEST NUEVO =====
+
                 "C:\\msys64\\ucrt64\\bin\\g++.exe" test.cpp -o test.exe
 
                 if not exist test.exe exit /b 1
-
-                set PATH=C:\\msys64\\ucrt64\\bin;%PATH%
 
                 test.exe
                 '''
